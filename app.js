@@ -19,12 +19,8 @@ let corsOptionsDelegate = function (req, callback) {
   }
   callback(null, corsOptions) // callback expects two parameters: error and options
 }
- 
 
-let corsOptions = {
-  origin: 'https://www.wristaficionado.io/',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, letious SmartTVs) choke on 204
-}
+
 
 // Bodyparser Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -45,6 +41,7 @@ const addMember = async (member) => {
   return response;
 };
 
+app.options('/signup', cors(corsOptionsDelegate))
 // Signup Route
 app.post('/signup', cors(corsOptionsDelegate), (req, res) => {
 
