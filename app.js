@@ -66,7 +66,7 @@ app.post('/signup', cors(corsOptionsDelegate), (req, res) => {
     ];
 
   addMember(data)
-    .then(response => res.send(response))
+    .then(response => res.sendStatus(200))
       
     .catch(err => {
       console.log(err)
