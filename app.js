@@ -10,16 +10,16 @@ var morgan = require('morgan')
 const app = express();
 
 
-let whitelist = ['https://www.wristaficionado.io/', 'https://www.wristaficionado.io/', 'http://localhost:3000', 'http://localhost:5555']
+let whitelist = ['https://www.wristaficionado.io/', 'https://www.wristaficionado.io/', 'http://www.wristaficionado.io/', 'http://www.wristaficionado.io/', 'https://wristaficionado.io/', 'https://wristaficionado.io/', 'http://wristaficionado.io/', 'http://wristaficionado.io/', 'http://localhost:3000', 'http://localhost:5555']
 
-let corsOptionsDelegate = function (req, callback) {
-  let corsOptions;
-  if (whitelist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: false } // disable CORS for this request
+let corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
   }
-  callback(null, corsOptions) // callback expects two parameters: error and options
 }
 
 
@@ -27,7 +27,7 @@ let corsOptionsDelegate = function (req, callback) {
 // Bodyparser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors(corsOptionsDelegate));
+app.use(cors(corsOptions));
 app.use(morgan('tiny'))
 
 // Static folder
@@ -45,11 +45,14 @@ const addMember = async (member) => {
   return response;
 };
 
-app.options('/signup', cors(corsOptionsDelegate), (req, res) => {
+app.options('/', cors(corsOptions), (req, res) => {
+  res.sendStatus(200)
+})
+app.options('/signup', cors(corsOptions), (req, res) => {
   res.sendStatus(200)
 })
 // Signup Route
-app.post('/signup', cors(corsOptionsDelegate), (req, res) => {
+app.post('/signup', cors(corsOptions), (req, res) => {
 
   const { email } = req.body;
 
