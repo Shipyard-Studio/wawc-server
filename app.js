@@ -5,10 +5,12 @@ const fetch = require('node-fetch');
 require('dotenv').config();
 const mailchimp = require("@mailchimp/mailchimp_marketing");
 const cors = require('cors');
+var morgan = require('morgan')
 
 const app = express();
 
-let whitelist = ['https://www.wristaficionado.io/', 'http://localhost:3000']
+
+let whitelist = ['https://www.wristaficionado.io/', 'http://localhost:3000', 'http://localhost:5555']
 
 let corsOptionsDelegate = function (req, callback) {
   let corsOptions;
@@ -23,8 +25,10 @@ let corsOptionsDelegate = function (req, callback) {
 
 
 // Bodyparser Middleware
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(corsOptionsDelegate));
+app.use(morgan('tiny'))
 
 // Static folder
 // app.use(express.static(path.join(__dirname, 'public')));
@@ -44,9 +48,6 @@ const addMember = async (member) => {
 app.options('/signup', cors(corsOptionsDelegate))
 // Signup Route
 app.post('/signup', cors(corsOptionsDelegate), (req, res) => {
-
-  let host = req.get('host');
-  console.log(host)
 
   const { email } = req.body;
 
