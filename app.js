@@ -12,7 +12,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Static folder
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 mailchimp.setConfig({
   apiKey: `${process.env.EMAIL_TOKEN}`,
@@ -45,7 +45,7 @@ app.post('/signup', (req, res) => {
     ];
 
   addMember(data)
-    .then(res.sendStatus(200))
+    .then(response => res.send(response))
       
     .catch(err => {
       console.log(err)
