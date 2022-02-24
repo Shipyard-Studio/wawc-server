@@ -10,7 +10,7 @@ var morgan = require('morgan')
 const app = express();
 
 
-let whitelist = ['https://www.wristaficionado.io/', 'http://localhost:3000', 'http://localhost:5555']
+let whitelist = ['https://www.wristaficionado.io/', 'https://www.wristaficionado.io/', 'http://localhost:3000', 'http://localhost:5555']
 
 let corsOptionsDelegate = function (req, callback) {
   let corsOptions;
@@ -45,7 +45,9 @@ const addMember = async (member) => {
   return response;
 };
 
-app.options('/signup', cors(corsOptionsDelegate))
+app.options('/signup', cors(corsOptionsDelegate), (req, res) => {
+  res.sendStatus(200)
+})
 // Signup Route
 app.post('/signup', cors(corsOptionsDelegate), (req, res) => {
 
