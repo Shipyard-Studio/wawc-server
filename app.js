@@ -27,7 +27,7 @@ let corsOptions = {
 // Bodyparser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(morgan('tiny'))
 
 // Static folder
@@ -45,12 +45,12 @@ const addMember = async (member) => {
   return response;
 };
 
-app.options('*', cors(corsOptions), (req, res) => {
+app.options('*', cors(), (req, res) => {
   res.sendStatus(200)
 })
 
 // Signup Route
-app.post('/signup', cors(corsOptions), (req, res) => {
+app.post('/signup', cors( ), (req, res) => {
 
   const { email } = req.body;
 
