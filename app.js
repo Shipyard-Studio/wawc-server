@@ -12,14 +12,9 @@ const app = express();
 
 let whitelist = ['https://www.wristaficionado.io/', 'https://www.wristaficionado.io/', 'http://www.wristaficionado.io/', 'http://www.wristaficionado.io/', 'https://wristaficionado.io/', 'https://wristaficionado.io/', 'http://wristaficionado.io/', 'http://wristaficionado.io/', 'http://localhost:3000', 'http://localhost:5555']
 
-let corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
+var corsOptions = {
+  origin: 'https://www.wristaficionado.io/',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
 
@@ -45,12 +40,12 @@ const addMember = async (member) => {
   return response;
 };
 
-app.options('*', cors(), (req, res) => {
+app.options('*', cors(corsOptions), (req, res) => {
   res.sendStatus(200)
 })
 
 // Signup Route
-app.post('/signup', cors( ), (req, res) => {
+app.post('/signup', cors(corsOptions), (req, res) => {
 
   const { email } = req.body;
 
