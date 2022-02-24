@@ -24,7 +24,7 @@ let corsOptionsDelegate = function (req, callback) {
 
 // Bodyparser Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors(corsOptions));
+app.use(cors(corsOptionsDelegate));
 
 // Static folder
 // app.use(express.static(path.join(__dirname, 'public')));
