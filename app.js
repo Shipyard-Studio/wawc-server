@@ -45,12 +45,10 @@ const addMember = async (member) => {
   return response;
 };
 
-app.options('/', cors(corsOptions), (req, res) => {
+app.options('*', cors(corsOptions), (req, res) => {
   res.sendStatus(200)
 })
-app.options('/signup', cors(corsOptions), (req, res) => {
-  res.sendStatus(200)
-})
+
 // Signup Route
 app.post('/signup', cors(corsOptions), (req, res) => {
 
