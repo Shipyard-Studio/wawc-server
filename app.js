@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fetch = require('node-fetch');
+require('dotenv').config();
+const mailchimp = require("@mailchimp/mailchimp_marketing");
+const { runMain } = require('module');
 
 const app = express();
 
@@ -11,45 +14,46 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+mailchimp.setConfig({
+  apiKey: `${process.env.EMAIL_TOKEN}`,
+  server: "us14",
+});
+
+const addMember = async (member) => {
+  const response = await mailchimp.lists.batchListMembers("4f1a7fee0c", {
+    members: member,
+  });
+  return response;
+};
+
 // Signup Route
 app.post('/signup', (req, res) => {
-  const { firstName, lastName, email } = req.body;
+  const { email } = req.body;
 
   // Make sure fields are filled
-  if (!firstName || !lastName || !email) {
-    res.redirect('/fail.html');
+  if (!email) {
+    res.sendStatus(401);
     return;
   }
 
   // Construct req data
-  const data = {
-    members: [
+  const data = [
       {
         email_address: email,
         status: 'subscribed',
-        merge_fields: {
-          FNAME: firstName,
-          LNAME: lastName
-        }
       }
-    ]
-  };
+    ];
 
-  const postData = JSON.stringify(data);
+  addMember(data)
+    .then(res.sendStatus(200))
+      
+    .catch(err => {
+      console.log(err)
+      res.sendStatus(400)
+    })
 
-  fetch('https://usX.api.mailchimp.com/3.0/lists/<YOUR_AUDIENCE_ID>', {
-    method: 'POST',
-    headers: {
-      Authorization: 'auth <YOUR_API_KEY>'
-    },
-    body: postData
-  })
-    .then(res.statusCode === 200 ?
-      res.redirect('/success.html') :
-      res.redirect('/fail.html'))
-    .catch(err => console.log(err))
 })
 
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT || 5555;
 app.listen(PORT, console.log(`Server started on ${PORT}`));
+
