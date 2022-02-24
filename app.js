@@ -40,9 +40,9 @@ const addMember = async (member) => {
   return response;
 };
 
-app.options('*', cors(corsOptions), (req, res) => {
-  res.sendStatus(200)
-})
+// app.options('*', cors(corsOptions), (req, res) => {
+//   res.sendStatus(200)
+// })
 
 // Signup Route
 app.post('/signup', cors(corsOptions), (req, res) => {
