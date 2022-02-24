@@ -8,7 +8,7 @@ const cors = require('cors');
 
 const app = express();
 
-let whitelist = ['https://www.wristaficionado.io/', 'localhost:3000']
+let whitelist = ['https://www.wristaficionado.io/', 'http://localhost:3000']
 
 let corsOptionsDelegate = function (req, callback) {
   let corsOptions;
